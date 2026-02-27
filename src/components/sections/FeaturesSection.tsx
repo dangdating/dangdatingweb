@@ -16,9 +16,16 @@ export function FeaturesSection() {
   return (
     <SectionWrapper id={SECTION_IDS.FEATURES}>
       <ScrollReveal>
-        <h2 className="font-display text-3xl md:text-4xl font-bold text-center ko-heading ko-tight max-w-[14ch] md:max-w-[18ch] mx-auto">
-          {COPY.features.title}
-        </h2>
+        <div className="text-center mx-auto max-w-[20ch] md:max-w-[24ch]">
+          <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground ko-heading ko-tight">
+            {COPY.features.title}
+          </h2>
+          {COPY.features.subtitle && (
+            <p className="mt-4 text-lg font-medium text-foreground-muted ko-body">
+              {COPY.features.subtitle}
+            </p>
+          )}
+        </div>
       </ScrollReveal>
 
       {/* Tab buttons */}

@@ -10,10 +10,7 @@ export const leadSchema = z.object({
     .optional()
     .or(z.literal("")),
   hasDog: z.boolean(),
-  testPhase1: z.enum(["possible", "maybe"]),
-  testPhase2: z.enum(["possible", "maybe"]),
-  consentLaunchAlert: z.boolean(),
-  preRegisterIntent: z.enum(["yes", "thinking", "no"]),
+  preRegisterIntent: z.enum(["yes", "thinking"]),
   comment: z.string().max(500).optional(),
   consentPrivacy: z.literal(true, {
     message: "개인정보 수집에 동의해주세요",

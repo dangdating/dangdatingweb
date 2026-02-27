@@ -17,7 +17,7 @@ export function AboutSection() {
             <h2 className="font-display text-3xl md:text-4xl font-bold text-foreground ko-heading ko-tight max-w-[16ch] md:max-w-[20ch]">
               {COPY.about.title}
             </h2>
-            <p className="mt-5 text-foreground-muted ko-body ko-relaxed max-w-[35ch] md:max-w-[48ch]">
+            <p className="mt-5 text-foreground-muted ko-body ko-relaxed whitespace-pre-line max-w-full">
               {COPY.about.description}
             </p>
           </ScrollReveal>

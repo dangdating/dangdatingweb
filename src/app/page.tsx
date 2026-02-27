@@ -6,8 +6,6 @@ import { AboutSection } from "@/components/sections/AboutSection";
 import { ModesSection } from "@/components/sections/ModesSection";
 import { FeaturesSection } from "@/components/sections/FeaturesSection";
 import { HowItWorksSection } from "@/components/sections/HowItWorksSection";
-import { SafetySection } from "@/components/sections/SafetySection";
-import { StatsSection } from "@/components/sections/StatsSection";
 import { JoinSection } from "@/components/sections/JoinSection";
 import { FAQSection } from "@/components/sections/FAQSection";
 
@@ -21,8 +19,7 @@ export default function Home() {
         <ModesSection />
         <FeaturesSection />
         <HowItWorksSection />
-        <SafetySection />
-        <StatsSection />
+
         <JoinSection />
         <FAQSection />
       </main>

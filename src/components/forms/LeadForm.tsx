@@ -25,9 +25,6 @@ export function LeadForm() {
     resolver: zodResolver(leadSchema),
     defaultValues: {
       hasDog: true,
-      testPhase1: "possible",
-      testPhase2: "possible",
-      consentLaunchAlert: true,
       preRegisterIntent: "yes",
       consentPrivacy: false as unknown as true,
     },
@@ -143,7 +140,10 @@ export function LeadForm() {
             <button
               key={String(opt.value)}
               type="button"
-              onClick={() => setValue("hasDog", opt.value)}
+              onClick={() => {
+                setValue("hasDog", opt.value);
+                if (!opt.value) setShowExit(true);
+              }}
               className={cn(
                 "flex-1 py-2.5 rounded-xl text-sm font-medium transition-all border",
                 hasDog === opt.value
@@ -157,34 +157,15 @@ export function LeadForm() {
         </div>
       </div>
 
-      {/* Test phase */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div>
-          <label className={labelCn}>1차 테스트 참여</label>
-          <select {...register("testPhase1")} className={cn(inputCn, "appearance-none")}>
-            <option value="possible">참여 가능</option>
-            <option value="maybe">고민 중</option>
-          </select>
-        </div>
-        <div>
-          <label className={labelCn}>2차 테스트 참여</label>
-          <select {...register("testPhase2")} className={cn(inputCn, "appearance-none")}>
-            <option value="possible">참여 가능</option>
-            <option value="maybe">고민 중</option>
-          </select>
-        </div>
-      </div>
-
       {/* Pre-register intent */}
       <div>
-        <label className={labelCn}>사전 등록 의향</label>
+        <label className={labelCn}>참여 의향</label>
         <select
           {...register("preRegisterIntent")}
           className={cn(inputCn, "appearance-none")}
         >
-          <option value="yes">네, 등록할게요</option>
-          <option value="thinking">생각 중이에요</option>
-          <option value="no">아직은 아니에요</option>
+          <option value="yes" className="text-gray-900 bg-white">네, 참여할래요</option>
+          <option value="thinking" className="text-gray-900 bg-white">조금 더 고민해볼게요</option>
         </select>
       </div>
 
@@ -201,17 +182,6 @@ export function LeadForm() {
 
       {/* Consents */}
       <div className="space-y-3">
-        <label className="flex items-start gap-3 cursor-pointer group">
-          <input
-            type="checkbox"
-            {...register("consentLaunchAlert")}
-            className="mt-0.5 w-4 h-4 rounded border-white/20 bg-white/5 text-primary focus:ring-primary/30"
-          />
-          <span className="text-sm text-white/60 group-hover:text-white/80 transition-colors ko-body">
-            출시 알림을 받겠습니다 (선택)
-          </span>
-        </label>
-
         <label className="flex items-start gap-3 cursor-pointer group">
           <input
             type="checkbox"
