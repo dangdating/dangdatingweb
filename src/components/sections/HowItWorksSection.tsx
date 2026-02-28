@@ -53,9 +53,8 @@ export function HowItWorksSection() {
         ))}
       </StaggerChildren>
 
-      {/* Summary */}
       <ScrollReveal delay={0.3}>
-        <p className="mt-12 text-center text-primary font-semibold text-lg font-display ko-heading max-w-[20ch] mx-auto">
+        <p className="mt-12 text-center text-primary font-semibold text-base md:text-lg font-display ko-heading whitespace-nowrap mx-auto">
           {COPY.howItWorks.summary}
         </p>
       </ScrollReveal>
