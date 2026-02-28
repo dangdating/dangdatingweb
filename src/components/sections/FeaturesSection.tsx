@@ -18,7 +18,7 @@ export function FeaturesSection() {
       <ScrollReveal>
         <div className="text-center mx-auto md:max-w-4xl px-4">
           {COPY.features.subtitle && (
-            <p className="mb-4 text-base font-semibold text-primary">
+            <p className="mb-4 text-base font-semibold text-primary whitespace-nowrap">
               {COPY.features.subtitle}
             </p>
           )}
