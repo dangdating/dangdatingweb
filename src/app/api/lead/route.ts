@@ -1,9 +1,7 @@
-// POST /api/lead — 리드 수집 API (Resend 이메일 발송 포함)
+// POST /api/lead — 리드 수집 API (Nodemailer/Gmail 발송 포함)
 import { NextResponse } from "next/server";
 import { leadSchema } from "@/lib/validation";
-import { Resend } from "resend";
-
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from "nodemailer";
 
 export async function POST(req: Request) {
   try {
@@ -25,13 +23,20 @@ export async function POST(req: Request) {
 
     const { email, wantsLaunchAlert, wantsUserTest } = result.data;
 
-    // 1. Resend를 통한 이메일 발송
-    // API 키가 없을 경우 에러가 발생할 수 있으므로 try-catch로 감싸거나 조건부 실행
-    if (process.env.RESEND_API_KEY && process.env.RESEND_API_KEY !== "re_your_api_key_here") {
+    // 1. Nodemailer를 통한 이메일 발송 (Gmail SMTP)
+    if (process.env.GMAIL_USER && process.env.GMAIL_PASS) {
       try {
-        await resend.emails.send({
-          from: "DangDating <onboarding@resend.dev>", // 등록된 도메인이 없을 경우 기본 제공 주소 사용
-          to: ["dangdating.team@gmail.com"],
+        const transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.GMAIL_USER,
+            pass: process.env.GMAIL_PASS, // 앱 비밀번호 사용 필요
+          },
+        });
+
+        await transporter.sendMail({
+          from: `"DangDating" <${process.env.GMAIL_USER}>`,
+          to: "dangdating.team@gmail.com",
           subject: "🎉 새로운 사전 예약 신청이 도착했습니다!",
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -47,14 +52,13 @@ export async function POST(req: Request) {
           `,
         });
       } catch (emailError) {
-        console.error("Failed to send email:", emailError);
-        // 이메일 발송 실패가 전체 로직의 실패로 이어지지 않게 처리
+        console.error("Failed to send email via Gmail:", emailError);
       }
     } else {
-      console.log("[MOCK] Resend API Key missing. Lead details:", result.data);
+      console.log("[MOCK] Gmail credentials missing. Lead details:", result.data);
     }
 
-    // 2. Mock: log and return success (추후 DB 연동 가능)
+    // 2. Mock: log and return success
     console.log("Lead captured:", result.data);
 
     return NextResponse.json({
