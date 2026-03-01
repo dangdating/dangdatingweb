@@ -23,9 +23,15 @@ export async function POST(req: Request) {
 
     const { email, wantsLaunchAlert, wantsUserTest } = result.data;
 
+    console.log("--- Email Sending Debug Start ---");
+    console.log("Recipient Email from Form:", email);
+    console.log("GMAIL_USER exists:", !!process.env.GMAIL_USER);
+    console.log("GMAIL_PASS exists:", !!process.env.GMAIL_PASS);
+
     // 1. Nodemailer를 통한 이메일 발송 (Gmail SMTP)
     if (process.env.GMAIL_USER && process.env.GMAIL_PASS) {
       try {
+        console.log("Attempting to send email via Nodemailer...");
         const transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
@@ -34,7 +40,7 @@ export async function POST(req: Request) {
           },
         });
 
-        await transporter.sendMail({
+        const info = await transporter.sendMail({
           from: `"DangDating" <${process.env.GMAIL_USER}>`,
           to: "dangdating.team@gmail.com, gmdqn2tp@gmail.com",
           subject: "🎉 새로운 사전 예약 신청이 도착했습니다!",
@@ -51,22 +57,27 @@ export async function POST(req: Request) {
             </div>
           `,
         });
-      } catch (emailError) {
-        console.error("Failed to send email via Gmail:", emailError);
+        console.log("Email sent successfully. Message ID:", info.messageId);
+      } catch (emailError: any) {
+        console.error("Failed to send email via Gmail SMTP:");
+        console.error("Error Message:", emailError.message);
+        console.error("Error Code:", emailError.code);
+        if (emailError.response) console.error("SMTP Response:", emailError.response);
       }
     } else {
-      console.log("[MOCK] Gmail credentials missing. Lead details:", result.data);
+      console.warn("Skipping email send: Missing GMAIL_USER or GMAIL_PASS environment variables.");
     }
+    console.log("--- Email Sending Debug End ---");
 
-    // 2. Mock: log and return success
-    console.log("Lead captured:", result.data);
+    // 2. Log and return success
+    console.log("Lead processing completed:", result.data);
 
     return NextResponse.json({
       success: true,
       data: { leadId: crypto.randomUUID() },
     });
   } catch (error) {
-    console.error("Server API Error:", error);
+    console.error("Critical Server API Error:", error);
     return NextResponse.json(
       {
         success: false,
