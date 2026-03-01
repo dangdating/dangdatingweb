@@ -36,7 +36,7 @@ export async function POST(req: Request) {
 
         await transporter.sendMail({
           from: `"DangDating" <${process.env.GMAIL_USER}>`,
-          to: "dangdating.team@gmail.com",
+          to: "dangdating.team@gmail.com, gmdqn2tp@gmail.com",
           subject: "🎉 새로운 사전 예약 신청이 도착했습니다!",
           html: `
             <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
