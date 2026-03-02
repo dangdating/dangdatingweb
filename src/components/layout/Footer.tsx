@@ -11,7 +11,7 @@ export function Footer() {
               <img
                 src="/Frame%201984078378.svg"
                 alt="댕개팅"
-                className="h-8 w-auto object-contain brightness-0 invert"
+                className="h-8 w-auto object-contain"
               />
             </div>
             <p className="text-sm">
