@@ -58,6 +58,7 @@ export function ModesSection() {
               {/* App screen placeholder */}
               <div className="mt-5">
                 <ImagePlaceholder
+                  src={mode.image}
                   aspectRatio="9/16"
                   icon="phone"
                   label={`${mode.name.substring(mode.name.indexOf(" ") + 1)} 화면`}

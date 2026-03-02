@@ -53,6 +53,7 @@ export function AboutSection() {
           {/* Right: Image */}
           <ScrollReveal delay={0.15} direction="right">
             <ImagePlaceholder
+              src="/3.jpg"
               aspectRatio="3/2"
               icon="camera"
               label="보호자와 강아지"

@@ -94,6 +94,7 @@ export function FeaturesSection() {
             {/* Right: Screenshot */}
             <div className="flex justify-center">
               <ImagePlaceholder
+                src={tab.image}
                 aspectRatio="16/10"
                 icon="phone"
                 label={`${tab.label} 화면`}

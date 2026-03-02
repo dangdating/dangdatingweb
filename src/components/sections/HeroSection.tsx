@@ -161,7 +161,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.3, ease: [0.25, 0.1, 0.25, 1] as [number, number, number, number] }}
             className="flex justify-center lg:justify-end"
           >
-            <PhoneMockup label="앱 메인 화면" />
+            <PhoneMockup label="앱 메인 화면" src="/main.png" />
           </motion.div>
         </div>
       </div>
