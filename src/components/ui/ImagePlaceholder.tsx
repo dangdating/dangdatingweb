@@ -10,6 +10,9 @@ interface ImagePlaceholderProps {
   label?: string;
   icon?: "camera" | "phone" | "image";
   objectFit?: "cover" | "contain";
+  quality?: number;
+  unoptimized?: boolean;
+  priority?: boolean;
 }
 
 export function ImagePlaceholder({
@@ -20,6 +23,9 @@ export function ImagePlaceholder({
   label,
   icon = "image",
   objectFit = "cover",
+  quality = 100,
+  unoptimized = true,
+  priority = false,
 }: ImagePlaceholderProps) {
   if (src) {
     return (
@@ -31,10 +37,13 @@ export function ImagePlaceholder({
           src={src}
           alt={alt}
           fill
+          quality={quality}
+          unoptimized={unoptimized}
           sizes="(max-w-768px) 100vw, (max-w-1200px) 50vw, 33vw"
           className={cn(
             objectFit === "cover" ? "object-cover" : "object-contain bg-card/50"
           )}
+          priority={priority}
         />
       </div>
     );

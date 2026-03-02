@@ -7,9 +7,10 @@ interface PhoneMockupProps {
   label?: string;
   src?: string;
   cropTop?: boolean;
+  priority?: boolean;
 }
 
-export function PhoneMockup({ className, label, src, cropTop = false }: PhoneMockupProps) {
+export function PhoneMockup({ className, label, src, cropTop = false, priority = false }: PhoneMockupProps) {
   return (
     <div
       className={cn(
@@ -30,6 +31,7 @@ export function PhoneMockup({ className, label, src, cropTop = false }: PhoneMoc
             icon="phone"
             label={label || "앱 메인 화면"}
             className={cn("rounded-none border-0", cropTop && "-mt-9 scale-[1.05] origin-top")}
+            priority={priority}
           />
         </div>
       </div>
