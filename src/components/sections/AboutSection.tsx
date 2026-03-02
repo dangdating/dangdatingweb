@@ -26,9 +26,9 @@ export function AboutSection() {
                   <p
                     key={i}
                     className={`mb-6 md:mb-8 last:mb-0 whitespace-pre-line ${isHeadingQuestion
-                        ? "text-xl md:text-2xl font-bold text-foreground mb-8 md:mb-10"
-                        : ""
-                      } ${isMainEmphasis ? "leading-[1.25]" : ""}`}
+                      ? "text-xl md:text-2xl font-bold text-foreground mb-8 md:mb-10"
+                      : ""
+                      } ${isMainEmphasis ? "leading-[1.1]" : ""}`}
                   >
                     {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
                       if (part.startsWith("**") && part.endsWith("**")) {
@@ -41,7 +41,7 @@ export function AboutSection() {
                           <strong
                             key={j}
                             className={`font-bold text-foreground ${isEmphasis ? "block text-lg md:text-xl" : ""
-                              } ${isFirstLine ? "mt-10 md:mt-14 mb-0.5" : ""} ${isSecondLine ? "mt-0.5 mb-10 md:mt-14" : ""
+                              } ${isFirstLine ? "mt-6 md:mt-10 mb-0" : ""} ${isSecondLine ? "mt-0 mb-6 md:mt-10" : ""
                               }`}
                           >
                             {content}
