@@ -27,9 +27,9 @@ export function AboutSection() {
                   <p
                     key={i}
                     className={cn(
-                      "mb-4 md:mb-6 last:mb-0 whitespace-pre-line",
-                      isHeadingQuestion && "text-lg md:text-xl font-bold text-foreground mb-8 md:mb-10",
-                      isMainEmphasis && "leading-[1.1]"
+                      "mb-1 md:mb-1 last:mb-0 whitespace-pre-line",
+                      isHeadingQuestion && "text-lg md:text-xl font-bold text-foreground mb-6 md:mb-8",
+                      isMainEmphasis && "leading-[1.0] my-8 md:my-12"
                     )}
                   >
                     {paragraph.split(/(\*\*.*?\*\*)/).filter(p => !isMainEmphasis || p.trim() !== "").map((part, j) => {
@@ -43,10 +43,10 @@ export function AboutSection() {
                           <strong
                             key={j}
                             className={cn(
-                              "font-bold text-foreground text-foreground",
-                              isEmphasis && "block text-lg md:text-xl",
-                              isFirstLine && "mt-4 md:mt-6 mb-0",
-                              isSecondLine && "mt-0 mb-4 md:mt-6"
+                              "font-bold text-foreground",
+                              isEmphasis && "block text-xl md:text-2xl tracking-tight",
+                              isFirstLine && "mt-0 mb-0",
+                              isSecondLine && "mt-0 mb-0"
                             )}
                           >
                             {content}
