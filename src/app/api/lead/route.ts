@@ -5,13 +5,23 @@ import nodemailer from "nodemailer";
 import { createClient } from "@supabase/supabase-js";
 
 // Supabase 클라이언트 초기화
-const supabase = createClient(
-  process.env.SUPABASE_URL || "",
-  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
-);
+const SUPABASE_URL = process.env.SUPABASE_URL || "";
+const SUPABASE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "";
+
+if (!SUPABASE_URL || !SUPABASE_KEY) {
+  console.error("❌ Supabase environment variables are MISSING. Check .env.local");
+} else {
+  console.log("✅ Supabase client initialized with URL:", SUPABASE_URL.substring(0, 20) + "...");
+}
+
+const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export async function POST(req: Request) {
   try {
+    // 환경 변수 로드 재확인 (런타임)
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error("⚠️ SUPABASE_SERVICE_ROLE_KEY is empty in runtime!");
+    }
     const body = await req.json();
     const result = leadSchema.safeParse(body);
 
@@ -29,10 +39,12 @@ export async function POST(req: Request) {
     }
 
     const { email, wantsLaunchAlert, wantsUserTest } = result.data;
+    console.log("Processing lead submission for:", email);
 
     // 1. Supabase에 데이터 저장 (Upsert)
     try {
-      const { error: supabaseError } = await supabase
+      console.log("Attempting Supabase upsert into 'leads' table...");
+      const { data: upsertData, error: supabaseError } = await supabase
         .from("leads")
         .upsert(
           {
@@ -42,15 +54,16 @@ export async function POST(req: Request) {
             created_at: new Date().toISOString(),
           },
           { onConflict: "email" }
-        );
+        )
+        .select();
 
       if (supabaseError) {
-        console.error("Supabase storage error:", supabaseError.message);
+        console.error("Supabase storage error (JSON):", JSON.stringify(supabaseError, null, 2));
       } else {
-        console.log("Lead stored in Supabase successfully.");
+        console.log("Lead stored in Supabase successfully:", upsertData);
       }
     } catch (dbErr) {
-      console.error("Database connection error:", dbErr);
+      console.error("Critical database connection error:", dbErr);
     }
 
     // 2. Nodemailer를 통한 이메일 알림 발송 (Gmail SMTP)
