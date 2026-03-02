@@ -39,15 +39,12 @@ export async function POST(req: Request) {
     }
 
     const { email, wantsLaunchAlert, wantsUserTest } = result.data;
-    console.log("Processing lead submission for:", email);
 
     // 1. Supabase에 데이터 저장 (Upsert)
     try {
-      // 한국 시간(KST)으로 저장하기 위해 오프셋(+09:00)을 직접 명시
       const kstTime = new Date(new Date().getTime() + 9 * 60 * 60 * 1000).toISOString().replace("Z", "+09:00");
 
-      console.log("Attempting Supabase upsert into 'leads' table with KST time:", kstTime);
-      const { data: upsertData, error: supabaseError } = await supabase
+      const { error: supabaseError } = await supabase
         .from("leads")
         .upsert(
           {
@@ -57,13 +54,12 @@ export async function POST(req: Request) {
             created_at: kstTime,
           },
           { onConflict: "email" }
-        )
-        .select();
+        );
 
       if (supabaseError) {
-        console.error("Supabase storage error (JSON):", JSON.stringify(supabaseError, null, 2));
+        console.error("Supabase storage error:", supabaseError.message);
       } else {
-        console.log("Lead stored in Supabase successfully:", upsertData);
+        console.log(`Lead stored in Supabase successfully: ${email}`);
       }
     } catch (dbErr) {
       console.error("Critical database connection error:", dbErr);
