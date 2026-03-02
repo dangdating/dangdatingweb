@@ -29,13 +29,14 @@ export function AboutSection() {
                     {paragraph.split(/(\*\*.*?\*\*)/).map((part, j) => {
                       if (part.startsWith("**") && part.endsWith("**")) {
                         const content = part.slice(2, -2);
-                        const isEmphasis = content.includes("댕개팅은") || content.includes("시작했습니다");
+                        const isFirstLine = content.includes("댕개팅은");
+                        const isSecondLine = content.includes("시작했습니다");
+                        const isEmphasis = isFirstLine || isSecondLine;
 
                         return (
                           <strong
                             key={j}
-                            className={`font-bold text-foreground ${isEmphasis ? "block text-lg md:text-xl my-0" : ""
-                              }`}
+                            className={`font-bold text-foreground ${isEmphasis ? "block text-lg md:text-xl" : ""} ${isFirstLine ? "mt-20 mb-0" : ""} ${isSecondLine ? "mt-0 mb-20" : ""}`}
                           >
                             {content}
                           </strong>

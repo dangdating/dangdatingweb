@@ -1,7 +1,14 @@
-// POST /api/lead — 리드 수집 API (Nodemailer/Gmail 발송 포함)
+// POST /api/lead — 리드 수집 API (Nodemailer/Gmail 발송 + Supabase 저장)
 import { NextResponse } from "next/server";
 import { leadSchema } from "@/lib/validation";
 import nodemailer from "nodemailer";
+import { createClient } from "@supabase/supabase-js";
+
+// Supabase 클라이언트 초기화
+const supabase = createClient(
+  process.env.SUPABASE_URL || "",
+  process.env.SUPABASE_SERVICE_ROLE_KEY || ""
+);
 
 export async function POST(req: Request) {
   try {
@@ -23,15 +30,32 @@ export async function POST(req: Request) {
 
     const { email, wantsLaunchAlert, wantsUserTest } = result.data;
 
-    console.log("--- Email Sending Debug Start ---");
-    console.log("Recipient Email from Form:", email);
-    console.log("GMAIL_USER exists:", !!process.env.GMAIL_USER);
-    console.log("GMAIL_PASS exists:", !!process.env.GMAIL_PASS);
+    // 1. Supabase에 데이터 저장 (Upsert)
+    try {
+      const { error: supabaseError } = await supabase
+        .from("leads")
+        .upsert(
+          {
+            email,
+            pre_register: wantsLaunchAlert,
+            user_test: wantsUserTest,
+            created_at: new Date().toISOString(),
+          },
+          { onConflict: "email" }
+        );
 
-    // 1. Nodemailer를 통한 이메일 발송 (Gmail SMTP)
+      if (supabaseError) {
+        console.error("Supabase storage error:", supabaseError.message);
+      } else {
+        console.log("Lead stored in Supabase successfully.");
+      }
+    } catch (dbErr) {
+      console.error("Database connection error:", dbErr);
+    }
+
+    // 2. Nodemailer를 통한 이메일 알림 발송 (Gmail SMTP)
     if (process.env.GMAIL_USER && process.env.GMAIL_PASS) {
       try {
-        console.log("Attempting to send email via Nodemailer...");
         const transporter = nodemailer.createTransport({
           service: "gmail",
           auth: {
@@ -65,12 +89,7 @@ export async function POST(req: Request) {
         const emailError = err as { message?: string };
         console.error("Failed to send email via Gmail:", emailError.message);
       }
-    } else {
-      console.log("Skipping email: Missing GMAIL credentials.");
     }
-
-    // 2. Log and return success
-    console.log("Lead processing completed:", result.data);
 
     return NextResponse.json({
       success: true,
