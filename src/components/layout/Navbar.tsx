@@ -30,16 +30,13 @@ export function Navbar() {
         {/* Logo */}
         <a
           href={`#${SECTION_IDS.HOME}`}
-          className="flex items-center gap-2 group"
+          className="flex items-center group"
         >
           <img
-            src="/Gemini_Generated_Image_3sw5rv3sw5rv3sw5.png"
+            src="/Frame%201984078378.svg"
             alt="댕개팅"
-            className="h-7 w-auto object-contain"
+            className="h-8 w-auto object-contain transition-transform group-hover:scale-105"
           />
-          <span className="font-display font-bold text-xl tracking-tighter text-foreground group-hover:text-primary transition-colors">
-            댕개팅
-          </span>
         </a>
 
         {/* Desktop nav */}

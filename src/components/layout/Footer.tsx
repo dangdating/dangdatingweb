@@ -7,15 +7,12 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-5 md:px-8 lg:px-12 xl:px-16">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
-            <div className="flex items-center gap-2 mb-2">
+            <div className="mb-2">
               <img
-                src="/Gemini_Generated_Image_3sw5rv3sw5rv3sw5.png"
+                src="/Frame%201984078378.svg"
                 alt="댕개팅"
-                className="h-7 w-auto object-contain brightness-0 invert"
+                className="h-8 w-auto object-contain brightness-0 invert"
               />
-              <span className="font-display font-bold text-xl tracking-tighter text-white">
-                댕개팅
-              </span>
             </div>
             <p className="text-sm">
               우리 동네에서, 믿고 만나는 반려견 보호자
