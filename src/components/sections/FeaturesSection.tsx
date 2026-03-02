@@ -11,10 +11,46 @@ import { cn } from "@/lib/utils";
 
 export function FeaturesSection() {
   const [activeTab, setActiveTab] = useState(0);
+  const [direction, setDirection] = useState(0); // 1 for right (next), -1 for left (prev)
   const tab = COPY.features.tabs[activeTab];
 
+  const handleTabChange = (newIndex: number) => {
+    setDirection(newIndex > activeTab ? 1 : -1);
+    setActiveTab(newIndex);
+  };
+
+  const handleDragEnd = (_: any, info: any) => {
+    const swipeThreshold = 50;
+    if (info.offset.x < -swipeThreshold) {
+      // Swiped left -> move to next tab
+      if (activeTab < COPY.features.tabs.length - 1) {
+        handleTabChange(activeTab + 1);
+      }
+    } else if (info.offset.x > swipeThreshold) {
+      // Swiped right -> move to previous tab
+      if (activeTab > 0) {
+        handleTabChange(activeTab - 1);
+      }
+    }
+  };
+
+  const variants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 50 : -50,
+      opacity: 0,
+    }),
+    center: {
+      x: 0,
+      opacity: 1,
+    },
+    exit: (direction: number) => ({
+      x: direction > 0 ? -50 : 50,
+      opacity: 0,
+    }),
+  };
+
   return (
-    <SectionWrapper id={SECTION_IDS.FEATURES}>
+    <SectionWrapper id={SECTION_IDS.FEATURES} className="overflow-hidden">
       <ScrollReveal>
         <div className="text-center mx-auto md:max-w-4xl px-4">
           {COPY.features.subtitle && (
@@ -34,7 +70,7 @@ export function FeaturesSection() {
           {COPY.features.tabs.map((t, i) => (
             <button
               key={t.id}
-              onClick={() => setActiveTab(i)}
+              onClick={() => handleTabChange(i)}
               className={cn(
                 "px-5 py-2.5 rounded-full text-sm font-medium transition-all",
                 activeTab === i
@@ -49,18 +85,24 @@ export function FeaturesSection() {
       </ScrollReveal>
 
       {/* Tab content */}
-      <div className="mt-12">
-        <AnimatePresence mode="wait">
+      <div className="mt-12 relative touch-pan-y">
+        <AnimatePresence mode="wait" custom={direction}>
           <motion.div
             key={tab.id}
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
             transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.2}
+            onDragEnd={handleDragEnd}
+            className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center cursor-grab active:cursor-grabbing"
           >
             {/* Left: Description */}
-            <div className="flex flex-col items-center text-center">
+            <div className="flex flex-col items-center text-center select-none">
               <h3 className="font-display text-2xl font-bold text-foreground ko-heading ko-tight max-w-[20ch] mx-auto">
                 {tab.title}
               </h3>
@@ -91,7 +133,7 @@ export function FeaturesSection() {
               </ul>
             </div>
 
-            <div className="flex justify-center w-full">
+            <div className="flex justify-center w-full select-none pointer-events-none">
               <div className="relative p-1 bg-card rounded-[2.5rem] border border-border shadow-2xl w-full max-w-[280px] md:max-w-[280px] overflow-hidden">
                 <ImagePlaceholder
                   src={tab.image}
@@ -105,6 +147,19 @@ export function FeaturesSection() {
             </div>
           </motion.div>
         </AnimatePresence>
+
+        {/* Swipe Hint (Mobile only) */}
+        <div className="mt-8 flex justify-center gap-1.5 lg:hidden">
+          {COPY.features.tabs.map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                "w-1.5 h-1.5 rounded-full transition-all duration-300",
+                activeTab === i ? "bg-primary w-4" : "bg-border"
+              )}
+            />
+          ))}
+        </div>
       </div>
     </SectionWrapper>
   );
