@@ -8,6 +8,7 @@ interface ImagePlaceholderProps {
   className?: string;
   label?: string;
   icon?: "camera" | "phone" | "image";
+  objectFit?: "cover" | "contain";
 }
 
 export function ImagePlaceholder({
@@ -17,13 +18,18 @@ export function ImagePlaceholder({
   className,
   label,
   icon = "image",
+  objectFit = "cover",
 }: ImagePlaceholderProps) {
   if (src) {
     return (
       <img
         src={src}
         alt={alt}
-        className={cn("w-full h-auto object-cover rounded-2xl", className)}
+        className={cn(
+          "w-full h-auto rounded-2xl",
+          objectFit === "cover" ? "object-cover" : "object-contain bg-card/50",
+          className
+        )}
         style={{ aspectRatio }}
       />
     );

@@ -91,15 +91,17 @@ export function FeaturesSection() {
               </ul>
             </div>
 
-            {/* Right: Screenshot */}
-            <div className="flex justify-center">
-              <ImagePlaceholder
-                src={tab.image}
-                aspectRatio="16/10"
-                icon="phone"
-                label={`${tab.label} 화면`}
-                className="w-full max-w-md shadow-lg"
-              />
+            <div className="flex justify-center w-full">
+              <div className="relative p-1 bg-card rounded-[2rem] border border-border shadow-2xl w-full max-w-xl overflow-hidden">
+                <ImagePlaceholder
+                  src={tab.image}
+                  aspectRatio="16/10"
+                  objectFit="contain"
+                  icon="phone"
+                  label={`${tab.label} 화면`}
+                  className="w-full border-0 rounded-[1.8rem]"
+                />
+              </div>
             </div>
           </motion.div>
         </AnimatePresence>
