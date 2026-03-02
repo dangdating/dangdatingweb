@@ -1,6 +1,7 @@
 // 루트 레이아웃. Sora(display)+Noto Sans KR(body) 폰트, 메타데이터, html/body 구조
 import type { Metadata } from "next";
 import { Noto_Sans_KR, Sora } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 
 const notoSansKR = Noto_Sans_KR({
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="ko" className={`${notoSansKR.variable} ${sora.variable}`}>
       <body className="font-body antialiased bg-background text-foreground">
         {children}
+        <Analytics />
       </body>
     </html>
   );
