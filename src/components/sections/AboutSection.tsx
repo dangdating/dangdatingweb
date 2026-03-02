@@ -6,6 +6,7 @@ import { SectionWrapper } from "@/components/ui/SectionWrapper";
 import { ImagePlaceholder } from "@/components/ui/ImagePlaceholder";
 import { Marquee } from "@/components/ui/Marquee";
 import { ScrollReveal } from "@/components/motion/ScrollReveal";
+import { cn } from "@/lib/utils";
 
 export function AboutSection() {
   return (
@@ -25,10 +26,11 @@ export function AboutSection() {
                 return (
                   <p
                     key={i}
-                    className={`mb-4 md:mb-6 last:mb-0 whitespace-pre-line ${isHeadingQuestion
-                      ? "text-lg md:text-xl font-bold text-foreground mb-8 md:mb-10"
-                      : ""
-                      } ${isMainEmphasis ? "leading-[1.2]" : ""}`}
+                    className={cn(
+                      "mb-4 md:mb-6 last:mb-0 whitespace-pre-line",
+                      isHeadingQuestion && "text-lg md:text-xl font-bold text-foreground mb-8 md:mb-10",
+                      isMainEmphasis && "leading-[1.1]"
+                    )}
                   >
                     {paragraph.split(/(\*\*.*?\*\*)/).filter(p => !isMainEmphasis || p.trim() !== "").map((part, j) => {
                       if (part.startsWith("**") && part.endsWith("**")) {
@@ -40,9 +42,12 @@ export function AboutSection() {
                         return (
                           <strong
                             key={j}
-                            className={`font-bold text-foreground ${isEmphasis ? "block text-lg md:text-xl" : ""
-                              } ${isFirstLine ? "mt-6 md:mt-8 mb-0" : ""} ${isSecondLine ? "mt-0 mb-6 md:mt-8" : ""
-                              }`}
+                            className={cn(
+                              "font-bold text-foreground text-foreground",
+                              isEmphasis && "block text-lg md:text-xl",
+                              isFirstLine && "mt-4 md:mt-6 mb-0",
+                              isSecondLine && "mt-0 mb-4 md:mt-6"
+                            )}
                           >
                             {content}
                           </strong>
